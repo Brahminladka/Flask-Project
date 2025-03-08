@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-center mb-4">🚀 My To-Do List</h1>
+
+<!-- Task Input Form -->
+<form method="POST" class="d-flex">
+    {{ form.hidden_tag() }}
+    {{ form.task(class="form-control", placeholder="Enter a task...") }}
+    {{ form.submit(class="btn btn-success ms-2") }}
+</form>
+
+<!-- Pending Tasks -->
+<h3 class="mt-4">📌 Pending Tasks</h3>
+<ul class="list-group">
+    {% for task in tasks %}
+        {% if not task.completed %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ task.task }}
+            <div>
+                <a href="{{ url_for('complete', task_id=task.id) }}" class="btn btn-sm btn-primary">✅ Complete</a>
+                <a href="{{ url_for('delete', task_id=task.id) }}" class="btn btn-sm btn-danger">🗑️ Delete</a>
+            </div>
+        </li>
+        {% endif %}
+    {% endfor %}
+</ul>
+
+<!-- Completed Tasks -->
+<h3 class="mt-4 text-success">✅ Completed Tasks</h3>
+<ul class="list-group">
+    {% for task in tasks %}
+        {% if task.completed %}
+        <li class="list-group-item d-flex justify-content-between align-items-center bg-light text-muted">
+            <del>{{ task.task }}</del>
+            <a href="{{ url_for('complete', task_id=task.id) }}" class="btn btn-sm btn-warning">🔄 Undo</a>
+        </li>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endblock %}
